@@ -1,6 +1,7 @@
 ﻿using Discord.Webhook;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MiExLoggingDiscord.EmbedsConstructor;
 
 namespace MiExLoggingDiscord.ServiceProvider;
 
