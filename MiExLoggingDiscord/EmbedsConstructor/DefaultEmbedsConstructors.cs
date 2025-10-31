@@ -5,49 +5,30 @@ namespace MiExLoggingDiscord.EmbedsConstructor;
 
 public static class DefaultEmbedsConstructors
 {
-  public static readonly IEmbedsConstructor[] Instances =
-  [
-    new TraceEmbedsConstructor(),
-    new DebugEmbedsConstructor(),
-    new InformationEmbedsConstructor(),
-    new WarningEmbedsConstructor(),
-    new ErrorEmbedsConstructor(),
-    new CriticalEmbedsConstructor()
-  ];
+  public static readonly IEnumerable<EmbedsConstructor> Instances =
+    Configs.AllConfigs.Select(config => new EmbedsConstructor { Config = config });
 
-  private class TraceEmbedsConstructor : EmbedsConstructorBase
+  public static class Configs
   {
-    protected override EmbedsConstructorConfig Config =>
+    public static readonly EmbedsConstructorConfig TraceConfig =
       new(LogLevel.Trace, "Trace", Color.DarkGrey);
-  }
 
-  private class DebugEmbedsConstructor : EmbedsConstructorBase
-  {
-    protected override EmbedsConstructorConfig Config =>
+    public static readonly EmbedsConstructorConfig DebugConfig =
       new(LogLevel.Debug, "Debug", Color.LightGrey);
-  }
 
-  private class InformationEmbedsConstructor : EmbedsConstructorBase
-  {
-    protected override EmbedsConstructorConfig Config =>
+    public static readonly EmbedsConstructorConfig InfoConfig =
       new(LogLevel.Information, "Info", Color.Green);
-  }
 
-  private class WarningEmbedsConstructor : EmbedsConstructorBase
-  {
-    protected override EmbedsConstructorConfig Config =>
+    public static readonly EmbedsConstructorConfig WarnConfig =
       new(LogLevel.Warning, "Warn", Color.Gold);
-  }
 
-  private class ErrorEmbedsConstructor : EmbedsConstructorBase
-  {
-    protected override EmbedsConstructorConfig Config =>
+    public static readonly EmbedsConstructorConfig ErrorConfig =
       new(LogLevel.Error, "ERROR", Color.Orange);
-  }
 
-  private class CriticalEmbedsConstructor : EmbedsConstructorBase
-  {
-    protected override EmbedsConstructorConfig Config =>
+    public static readonly EmbedsConstructorConfig CriticalConfig =
       new(LogLevel.Critical, "CRITICAL", Color.Red);
+
+    public static EmbedsConstructorConfig[] AllConfigs =>
+      [TraceConfig, DebugConfig, InfoConfig, WarnConfig, ErrorConfig, CriticalConfig];
   }
 }

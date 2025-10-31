@@ -7,9 +7,9 @@ namespace MiExLoggingDiscord.EmbedsConstructor;
 
 public record EmbedsConstructorConfig(LogLevel TargetLogLevel, string Title, Color Color);
 
-public abstract class EmbedsConstructorBase : IEmbedsConstructor
+public class EmbedsConstructor : IEmbedsConstructor
 {
-  protected abstract EmbedsConstructorConfig Config { get; }
+  public required EmbedsConstructorConfig Config { protected get; init; }
 
   public IEnumerable<Embed>? Construct<TState>(
     IExternalScopeProvider? scopeProvider,
