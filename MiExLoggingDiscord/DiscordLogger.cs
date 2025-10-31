@@ -20,7 +20,7 @@ public class DiscordLogger(
     Exception? exception,
     Func<TState, Exception?, string> formatter)
   {
-    if (IsEnabled(logLevel)) return;
+    if (!IsEnabled(logLevel)) return;
     var logEntry = new LogEntry<TState>(logLevel, name, eventId, state, exception, formatter);
     var embeds = embedsConstructors
       .Select(constructor => constructor.Construct(ScopeProvider, logEntry))
