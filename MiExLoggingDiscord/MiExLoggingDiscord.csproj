@@ -14,7 +14,12 @@
     <PackageId>kamome283.MiExLoggingDiscord</PackageId>
     <Title>MiExLoggingDiscord</Title>
     <Copyright>Copyright (c) kamome283 2025</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Discord.Net.Webhook" Version="3.18.0"/>
