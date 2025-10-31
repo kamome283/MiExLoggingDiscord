@@ -1,7 +1,6 @@
 ﻿using Discord.Webhook;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using MiExLoggingDiscord.EmbedsConstructor;
 
 namespace MiExLoggingDiscord;
 
