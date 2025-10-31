@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MiExLoggingDiscord.ServiceProvider;
 
 namespace MiExLoggingDiscord.Tests;
 
