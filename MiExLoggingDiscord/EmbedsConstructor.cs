@@ -9,7 +9,8 @@ public interface IEmbedsConstructor
 {
   IEnumerable<Embed>? Construct<TState>(
     IExternalScopeProvider? scopeProvider,
-    LogEntry<TState> entry);
+    LogEntry<TState> entry
+  );
 }
 
 public abstract class EmbedsConstructorBase : IEmbedsConstructor
@@ -21,38 +22,63 @@ public abstract class EmbedsConstructorBase : IEmbedsConstructor
     LogEntry<TState> entry)
   {
     if (entry.LogLevel != Config.TargetLogLevel) return null;
-    var scope = GetScope(scopeProvider, entry);
-    var details = GetDetails(scopeProvider, entry);
-    var embed = new EmbedBuilder
-      {
-        Title = Config.Title,
-        Color = Config.Color,
-      }
-      .AddField("Scope", scope)
-      .AddField("Details", details)
-      .Build();
+    var @params = new BuildActionParams<TState>(scopeProvider, entry, new EmbedBuilder());
+    foreach (var buildAction in GetBuildActions<TState>())
+    {
+      buildAction(@params);
+    }
+
+    var embed = @params.Builder.Build();
     return [embed];
   }
 
-  protected virtual string GetScope<TState>(
-    IExternalScopeProvider? scopeProvider,
-    LogEntry<TState> entry)
+  protected virtual Action<BuildActionParams<TState>>[] GetBuildActions<TState>()
   {
-    var scopeStringBuilder = new StringBuilder().AppendLine(entry.Category);
-    scopeProvider?.ForEachScope((scope, sb) =>
+    return [SetTitle, SetColor, SetScopeField, SetDetailsField, SetExceptionsField];
+  }
+
+  private void SetTitle<TState>(BuildActionParams<TState> @params)
+  {
+    @params.Builder.Title = Config.Title;
+  }
+
+  private void SetColor<TState>(BuildActionParams<TState> @params)
+  {
+    @params.Builder.Color = Config.Color;
+  }
+
+  private static void SetScopeField<TState>(BuildActionParams<TState> @params)
+  {
+    var scopeStringBuilder = new StringBuilder().AppendLine(@params.Entry.Category);
+    @params.ScopeProvider?.ForEachScope((scope, sb) =>
     {
       if (scope is null) return;
       sb.AppendLine($"=> {scope}");
     }, scopeStringBuilder);
-    return scopeStringBuilder.ToString();
+    @params.Builder.AddField("Scope", scopeStringBuilder.ToString());
   }
 
-  protected virtual string GetDetails<TState>(
-    IExternalScopeProvider? _,
-    LogEntry<TState> entry)
+  private static void SetDetailsField<TState>(BuildActionParams<TState> @params)
   {
-    return entry.Formatter(entry.State, entry.Exception);
+    var entry = @params.Entry;
+    var details = entry.Formatter(entry.State, entry.Exception);
+    @params.Builder.AddField("Details", details);
   }
+
+  private static void SetExceptionsField<TState>(BuildActionParams<TState> @params)
+  {
+    var ex = @params.Entry.Exception;
+    if (ex is null) return;
+    var builder = @params.Builder;
+    builder.AddField("Error Message", ex.Message);
+    builder.AddField("Error Source", ex.Source);
+    builder.AddField("Error StackTrace", ex.StackTrace);
+  }
+
+  protected record BuildActionParams<TState>(
+    IExternalScopeProvider? ScopeProvider,
+    LogEntry<TState> Entry,
+    EmbedBuilder Builder);
 }
 
 public record EmbedsConstructorConfig(LogLevel TargetLogLevel, string Title, Color Color);
