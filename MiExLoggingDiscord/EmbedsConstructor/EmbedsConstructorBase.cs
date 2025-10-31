@@ -65,8 +65,8 @@ public abstract class EmbedsConstructorBase : IEmbedsConstructor
     if (ex is null) return;
     var builder = @params.Builder;
     builder.AddField("Error Message", ex.Message);
-    builder.AddField("Error Source", ex.Source);
-    builder.AddField("Error StackTrace", ex.StackTrace);
+    if (ex.Source is not null) builder.AddField("Error Source", ex.Source);
+    if (ex.StackTrace is not null) builder.AddField("Error StackTrace", ex.StackTrace);
   }
 
   protected record BuildActionParams<TState>(
