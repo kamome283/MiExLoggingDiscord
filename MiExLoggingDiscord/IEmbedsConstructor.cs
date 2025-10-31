@@ -1,3 +1,4 @@
+using System.Text;
 using Discord;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -6,24 +7,51 @@ namespace MiExLoggingDiscord;
 
 public interface IEmbedsConstructor
 {
-  IEnumerable<Embed>? Construct<TState>(LogEntry<TState> entry);
+  IEnumerable<Embed>? Construct<TState>(
+    IExternalScopeProvider? scopeProvider,
+    LogEntry<TState> entry);
 }
 
 public abstract class EmbedsConstructorBase : IEmbedsConstructor
 {
   protected abstract EmbedsConstructorConfig Config { get; }
 
-  public IEnumerable<Embed>? Construct<TState>(LogEntry<TState> entry)
+  public IEnumerable<Embed>? Construct<TState>(
+    IExternalScopeProvider? scopeProvider,
+    LogEntry<TState> entry)
   {
     if (entry.LogLevel != Config.TargetLogLevel) return null;
-    var message = entry.Formatter(entry.State, entry.Exception);
+    var scope = GetScope(scopeProvider, entry);
+    var details = GetDetails(scopeProvider, entry);
     var embed = new EmbedBuilder
-    {
-      Title = Config.Title,
-      Description = message,
-      Color = Config.Color,
-    }.Build();
+      {
+        Title = Config.Title,
+        Color = Config.Color,
+      }
+      .AddField("Scope", scope)
+      .AddField("Details", details)
+      .Build();
     return [embed];
+  }
+
+  protected virtual string GetScope<TState>(
+    IExternalScopeProvider? scopeProvider,
+    LogEntry<TState> entry)
+  {
+    var scopeStringBuilder = new StringBuilder().AppendLine(entry.Category);
+    scopeProvider?.ForEachScope((scope, sb) =>
+    {
+      if (scope is null) return;
+      sb.AppendLine($"=> {scope}");
+    }, scopeStringBuilder);
+    return scopeStringBuilder.ToString();
+  }
+
+  protected virtual string GetDetails<TState>(
+    IExternalScopeProvider? _,
+    LogEntry<TState> entry)
+  {
+    return entry.Formatter(entry.State, entry.Exception);
   }
 }
 

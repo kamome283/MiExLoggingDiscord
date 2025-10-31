@@ -20,7 +20,7 @@ public class DiscordLogger(
     if (IsEnabled(logLevel)) return;
     var logEntry = new LogEntry<TState>(logLevel, name, eventId, state, exception, formatter);
     var embeds = embedsConstructors
-      .Select(constructor => constructor.Construct(logEntry))
+      .Select(constructor => constructor.Construct(scopeProvider, logEntry))
       .FirstOrDefault(embeds => embeds is not null);
     if (embeds is null) return;
     _ = discordClient.SendMessageAsync(embeds: embeds);
