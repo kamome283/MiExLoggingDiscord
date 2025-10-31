@@ -83,38 +83,51 @@ public abstract class EmbedsConstructorBase : IEmbedsConstructor
 
 public record EmbedsConstructorConfig(LogLevel TargetLogLevel, string Title, Color Color);
 
-public class TraceEmbedsConstructor : EmbedsConstructorBase
+public static class DefaultEmbedsConstructors
 {
-  protected override EmbedsConstructorConfig Config =>
-    new(LogLevel.Trace, "Trace", Color.DarkGrey);
-}
+  public static readonly IEmbedsConstructor[] Instances =
+  [
+    new TraceEmbedsConstructor(),
+    new DebugEmbedsConstructor(),
+    new InformationEmbedsConstructor(),
+    new WarningEmbedsConstructor(),
+    new ErrorEmbedsConstructor(),
+    new CriticalEmbedsConstructor()
+  ];
 
-public class DebugEmbedsConstructor : EmbedsConstructorBase
-{
-  protected override EmbedsConstructorConfig Config =>
-    new(LogLevel.Debug, "Debug", Color.LightGrey);
-}
+  private class TraceEmbedsConstructor : EmbedsConstructorBase
+  {
+    protected override EmbedsConstructorConfig Config =>
+      new(LogLevel.Trace, "Trace", Color.DarkGrey);
+  }
 
-public class InformationEmbedsConstructor : EmbedsConstructorBase
-{
-  protected override EmbedsConstructorConfig Config =>
-    new(LogLevel.Information, "Info", Color.Green);
-}
+  private class DebugEmbedsConstructor : EmbedsConstructorBase
+  {
+    protected override EmbedsConstructorConfig Config =>
+      new(LogLevel.Debug, "Debug", Color.LightGrey);
+  }
 
-public class WarningEmbedsConstructor : EmbedsConstructorBase
-{
-  protected override EmbedsConstructorConfig Config =>
-    new(LogLevel.Warning, "Warn", Color.Gold);
-}
+  private class InformationEmbedsConstructor : EmbedsConstructorBase
+  {
+    protected override EmbedsConstructorConfig Config =>
+      new(LogLevel.Information, "Info", Color.Green);
+  }
 
-public class ErrorEmbedsConstructor : EmbedsConstructorBase
-{
-  protected override EmbedsConstructorConfig Config =>
-    new(LogLevel.Error, "ERROR", Color.Orange);
-}
+  private class WarningEmbedsConstructor : EmbedsConstructorBase
+  {
+    protected override EmbedsConstructorConfig Config =>
+      new(LogLevel.Warning, "Warn", Color.Gold);
+  }
 
-public class CriticalEmbedsConstructor : EmbedsConstructorBase
-{
-  protected override EmbedsConstructorConfig Config =>
-    new(LogLevel.Critical, "CRITICAL", Color.Red);
+  private class ErrorEmbedsConstructor : EmbedsConstructorBase
+  {
+    protected override EmbedsConstructorConfig Config =>
+      new(LogLevel.Error, "ERROR", Color.Orange);
+  }
+
+  private class CriticalEmbedsConstructor : EmbedsConstructorBase
+  {
+    protected override EmbedsConstructorConfig Config =>
+      new(LogLevel.Critical, "CRITICAL", Color.Red);
+  }
 }
