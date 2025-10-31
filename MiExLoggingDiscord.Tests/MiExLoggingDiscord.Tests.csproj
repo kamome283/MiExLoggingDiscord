@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MiExLoggingDiscord.ServiceProvider\MiExLoggingDiscord.ServiceProvider.csproj"/>
+    <ProjectReference Include="..\MiExLoggingDiscord\MiExLoggingDiscord.csproj"/>
   </ItemGroup>
 
 </Project>
