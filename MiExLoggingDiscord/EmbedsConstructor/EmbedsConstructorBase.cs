@@ -31,26 +31,26 @@ public abstract class EmbedsConstructorBase : IEmbedsConstructor
     return [SetTitle, SetColor, SetDescription, SetScopeField, SetExceptionsField];
   }
 
-  private void SetTitle<TState>(BuildActionParams<TState> @params)
+  protected void SetTitle<TState>(BuildActionParams<TState> @params)
   {
     var eventId = @params.Entry.EventId;
     var eventDescription = eventId.Name is not null ? $"{eventId.Name}: {eventId.Id}" : eventId.Id.ToString();
     @params.Builder.Title = $"[{Config.Title}] {@params.Entry.Category} ({eventDescription})";
   }
 
-  private void SetColor<TState>(BuildActionParams<TState> @params)
+  protected void SetColor<TState>(BuildActionParams<TState> @params)
   {
     @params.Builder.Color = Config.Color;
   }
 
-  private static void SetDescription<TState>(BuildActionParams<TState> @params)
+  protected static void SetDescription<TState>(BuildActionParams<TState> @params)
   {
     var entry = @params.Entry;
     var description = entry.Formatter(entry.State, entry.Exception);
     @params.Builder.Description = description;
   }
 
-  private static void SetScopeField<TState>(BuildActionParams<TState> @params)
+  protected static void SetScopeField<TState>(BuildActionParams<TState> @params)
   {
     if (@params.ScopeProvider is null) return;
     var stringBuilder = new StringBuilder();
@@ -64,7 +64,7 @@ public abstract class EmbedsConstructorBase : IEmbedsConstructor
     @params.Builder.AddField("Scope", stringBuilder.ToString());
   }
 
-  private static void SetExceptionsField<TState>(BuildActionParams<TState> @params)
+  protected static void SetExceptionsField<TState>(BuildActionParams<TState> @params)
   {
     var ex = @params.Entry.Exception;
     if (ex is null) return;
