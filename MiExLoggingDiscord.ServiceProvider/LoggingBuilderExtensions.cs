@@ -5,7 +5,7 @@ using MiExLoggingDiscord.EmbedsConstructor;
 
 namespace MiExLoggingDiscord.ServiceProvider;
 
-public static class DiscordLoggerServiceProvider
+public static class LoggingBuilderExtensions
 {
   public static ILoggingBuilder AddDiscordLogger(
     this ILoggingBuilder builder,
