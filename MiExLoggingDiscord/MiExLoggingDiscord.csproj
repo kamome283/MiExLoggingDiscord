@@ -4,6 +4,16 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Version>0.1</Version>
+    <Authors>kamome283</Authors>
+    <Description>Logger and LoggerProvider Implementation for Discord in .NET 8</Description>
+    <PackageProjectUrl>https://github.com/kamome283/MiExLoggingDiscord</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/kamome283/MiExLoggingDiscord</RepositoryUrl>
+    <PackageTags>Discord; logger; logging</PackageTags>
+    <PackageId>kamome283.MiExLoggingDiscord</PackageId>
+    <Title>MiExLoggingDiscord</Title>
+    <Copyright>Copyright (c) kamome283 2025</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
