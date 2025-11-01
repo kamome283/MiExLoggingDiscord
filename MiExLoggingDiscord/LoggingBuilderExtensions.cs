@@ -12,11 +12,14 @@ public static class LoggingBuilderExtensions
     string webhookUrl,
     params IEmbedsConstructor[] additionalEmbedsConstructors)
   {
-    var webhookClient = new DiscordWebhookClient(webhookUrl);
-    builder.Services.AddSingleton(webhookClient);
+    var discordClient = new DiscordWebhookClient(webhookUrl);
+    builder.Services.AddSingleton(discordClient);
     var embedsConstructors = additionalEmbedsConstructors.Concat(DefaultEmbedsConstructors.Instances);
-    builder.Services.AddSingleton(embedsConstructors);
-    builder.Services.AddSingleton<ILoggerProvider, DiscordLoggerProvider>();
+    builder.Services.AddSingleton<ILoggerProvider, DiscordLoggerProvider>(provider =>
+    {
+      var client = provider.GetRequiredService<DiscordWebhookClient>();
+      return new DiscordLoggerProvider(embedsConstructors, client);
+    });
     return builder;
   }
 }
