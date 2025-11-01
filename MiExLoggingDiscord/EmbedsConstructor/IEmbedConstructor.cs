@@ -8,5 +8,8 @@ public interface IEmbedConstructor
 {
   protected bool ShouldSkip(LogLevel logLevel);
 
-  Embed? Construct<TState>(IExternalScopeProvider? scopeProvider, LogEntry<TState> entry);
+  (Embed embed, bool shouldMention)? Construct<TState>(
+    IExternalScopeProvider? scopeProvider,
+    LogLevel mentionLogLevel,
+    LogEntry<TState> entry);
 }

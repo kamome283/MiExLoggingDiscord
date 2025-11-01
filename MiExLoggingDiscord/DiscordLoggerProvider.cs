@@ -15,7 +15,8 @@ public class DiscordLoggerProvider(
   public void Dispose() => GC.SuppressFinalize(this);
 
   public ILogger CreateLogger(string categoryName) => _loggers.GetOrAdd(categoryName,
-    new DiscordLogger(categoryName, _scopeProvider, embedsConstructors, discordClient));
+    new DiscordLogger(categoryName, _scopeProvider, LogLevel.Error, embedsConstructors,
+      discordClient)); // TODO: make it customizable
 
   public void SetScopeProvider(IExternalScopeProvider scopeProvider)
   {
