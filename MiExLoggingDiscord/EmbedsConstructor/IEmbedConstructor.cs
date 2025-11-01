@@ -7,6 +7,10 @@ namespace MiExLoggingDiscord.EmbedsConstructor;
 public interface IEmbedConstructor
 {
   protected bool ShouldSkip(LogLevel logLevel);
+  protected string? GetMentionAddress<TState>(BuildActionArgs<TState> args);
 
-  Embed? Construct<TState>(IExternalScopeProvider? scopeProvider, LogEntry<TState> entry);
+  (Embed embed, string? mentionAddress)? Construct<TState>(
+    IExternalScopeProvider? scopeProvider,
+    LogLevel mentionLogLevel,
+    LogEntry<TState> entry);
 }

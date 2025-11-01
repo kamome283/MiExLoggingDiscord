@@ -14,7 +14,7 @@ public class LoggerTests : IDisposable
     LoggerConstructor = LoggerFactory.Create(builder =>
     {
       builder
-        .AddDiscordLogger(WebhookUrl)
+        .AddDiscordLogger(WebhookUrl, mentionLogLevel: LogLevel.Warning)
         .SetMinimumLevel(LogLevel.Trace);
     });
   }

@@ -8,6 +8,7 @@ namespace MiExLoggingDiscord;
 public class DiscordLogger(
   string name,
   IExternalScopeProvider? scopeProvider,
+  LogLevel mentionLogLevel,
   IEnumerable<IEmbedConstructor> embedsConstructors,
   DiscordWebhookClient discordClient) : ILogger
 {
@@ -23,10 +24,19 @@ public class DiscordLogger(
     if (!IsEnabled(logLevel)) return;
     var logEntry = new LogEntry<TState>(logLevel, name, eventId, state, exception, formatter);
     var embeds = embedsConstructors
-      .Select(constructor => constructor.Construct(ScopeProvider, logEntry))
+      .Select(constructor => constructor.Construct(ScopeProvider, mentionLogLevel, logEntry))
       .FirstOrDefault(embeds => embeds is not null);
     if (embeds is null) return;
-    _ = discordClient.SendMessageAsync(embeds: [embeds]);
+    var (embed, mentionAddress) = embeds.Value;
+    if (mentionAddress is not null)
+    {
+      var mentionText = $"@{mentionAddress}";
+      _ = discordClient.SendMessageAsync(mentionText, embeds: [embed]);
+    }
+    else
+    {
+      _ = discordClient.SendMessageAsync(embeds: [embed]);
+    }
   }
 
   public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
