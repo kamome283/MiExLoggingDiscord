@@ -7,6 +7,7 @@ namespace MiExLoggingDiscord;
 
 public class DiscordLoggerProvider(
   IEnumerable<IEmbedConstructor> embedsConstructors,
+  LogLevel mentionLogLevel,
   DiscordWebhookClient discordClient) : ILoggerProvider, ISupportExternalScope
 {
   private readonly ConcurrentDictionary<string, DiscordLogger> _loggers = [];
@@ -15,8 +16,7 @@ public class DiscordLoggerProvider(
   public void Dispose() => GC.SuppressFinalize(this);
 
   public ILogger CreateLogger(string categoryName) => _loggers.GetOrAdd(categoryName,
-    new DiscordLogger(categoryName, _scopeProvider, LogLevel.Error, embedsConstructors,
-      discordClient)); // TODO: make it customizable
+    new DiscordLogger(categoryName, _scopeProvider, mentionLogLevel, embedsConstructors, discordClient));
 
   public void SetScopeProvider(IExternalScopeProvider scopeProvider)
   {

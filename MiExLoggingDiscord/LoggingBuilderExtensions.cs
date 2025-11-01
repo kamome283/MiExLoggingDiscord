@@ -10,6 +10,7 @@ public static class LoggingBuilderExtensions
   public static ILoggingBuilder AddDiscordLogger(
     this ILoggingBuilder builder,
     string webhookUrl,
+    LogLevel mentionLogLevel = LogLevel.Error,
     params IEmbedConstructor[] additionalEmbedsConstructors)
   {
     var discordClient = new DiscordWebhookClient(webhookUrl);
@@ -18,7 +19,7 @@ public static class LoggingBuilderExtensions
     builder.Services.AddSingleton<ILoggerProvider, DiscordLoggerProvider>(provider =>
     {
       var client = provider.GetRequiredService<DiscordWebhookClient>();
-      return new DiscordLoggerProvider(embedsConstructors, client);
+      return new DiscordLoggerProvider(embedsConstructors, mentionLogLevel, client);
     });
     return builder;
   }
