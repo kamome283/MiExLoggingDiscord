@@ -26,7 +26,7 @@ public class DiscordLogger(
       .Select(constructor => constructor.Construct(ScopeProvider, logEntry))
       .FirstOrDefault(embeds => embeds is not null);
     if (embeds is null) return;
-    _ = discordClient.SendMessageAsync(embeds: embeds);
+    _ = discordClient.SendMessageAsync(embeds: [embeds]);
   }
 
   public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
