@@ -19,7 +19,7 @@ public class LoggerTests : IDisposable
     });
   }
 
-  private Task Throttle => Task.Delay(1000);
+  private static Task Throttle => Task.Delay(1000);
 
   private string WebhookUrl { get; }
   private ILoggerFactory LoggerConstructor { get; }
