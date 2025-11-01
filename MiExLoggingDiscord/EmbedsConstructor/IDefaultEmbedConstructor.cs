@@ -10,6 +10,11 @@ public interface IDefaultEmbedConstructor : IMultiStepEmbedConstructor, IEmbedCo
     return logLevel != TargetLogLevel;
   }
 
+  string? IEmbedConstructor.GetMentionAddress<TState>(BuildActionArgs<TState> args)
+  {
+    return args.Entry.LogLevel >= args.MentionLogLevel ? "everyone" : null;
+  }
+
   IEnumerable<Action<BuildActionArgs<TState>>> IMultiStepEmbedConstructor.GetBuildActions<TState>()
   {
     return [SetTitle, SetColor, SetDescription, SetScopeField, SetExceptionsField];

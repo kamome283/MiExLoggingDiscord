@@ -27,10 +27,10 @@ public class DiscordLogger(
       .Select(constructor => constructor.Construct(ScopeProvider, mentionLogLevel, logEntry))
       .FirstOrDefault(embeds => embeds is not null);
     if (embeds is null) return;
-    var (embed, shouldMention) = embeds.Value;
-    if (shouldMention)
+    var (embed, mentionAddress) = embeds.Value;
+    if (mentionAddress is not null)
     {
-      const string mentionText = "@everyone"; // TODO: make it customizable
+      var mentionText = $"@{mentionAddress}";
       _ = discordClient.SendMessageAsync(mentionText, embeds: [embed]);
     }
     else
