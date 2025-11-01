@@ -11,7 +11,7 @@ public record BuildActionArgs<TState>(
 
 public interface IMultiStepEmbedConstructor : IEmbedConstructor
 {
-  IEnumerable<Embed>? IEmbedConstructor.Construct<TState>(IExternalScopeProvider? scopeProvider, LogEntry<TState> entry)
+  Embed? IEmbedConstructor.Construct<TState>(IExternalScopeProvider? scopeProvider, LogEntry<TState> entry)
   {
     if (ShouldSkip(entry.LogLevel)) return null;
     var builder = new EmbedBuilder();
@@ -21,7 +21,7 @@ public interface IMultiStepEmbedConstructor : IEmbedConstructor
     }
 
     var embed = builder.Build();
-    return [embed];
+    return embed;
   }
 
   protected IEnumerable<Action<BuildActionArgs<TState>>> GetBuildActions<TState>();
