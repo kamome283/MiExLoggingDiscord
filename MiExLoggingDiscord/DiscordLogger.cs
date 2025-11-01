@@ -8,7 +8,7 @@ namespace MiExLoggingDiscord;
 public class DiscordLogger(
   string name,
   IExternalScopeProvider? scopeProvider,
-  IEnumerable<IEmbedsConstructor> embedsConstructors,
+  IEnumerable<IEmbedConstructor> embedsConstructors,
   DiscordWebhookClient discordClient) : ILogger
 {
   internal IExternalScopeProvider? ScopeProvider { get; set; } = scopeProvider;

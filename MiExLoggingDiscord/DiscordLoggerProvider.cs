@@ -6,7 +6,7 @@ using MiExLoggingDiscord.EmbedsConstructor;
 namespace MiExLoggingDiscord;
 
 public class DiscordLoggerProvider(
-  IEnumerable<IEmbedsConstructor> embedsConstructors,
+  IEnumerable<IEmbedConstructor> embedsConstructors,
   DiscordWebhookClient discordClient) : ILoggerProvider, ISupportExternalScope
 {
   private readonly ConcurrentDictionary<string, DiscordLogger> _loggers = [];
